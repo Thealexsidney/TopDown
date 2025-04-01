@@ -138,6 +138,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 552187463421816273, guid: aa9124c1402aeda4289134fdb1e0a108, type: 3}
   firePoint: {fileID: 4013652077148619023}
   firingRate: 0.2
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!50 &-7594974923804609917
 Rigidbody2D:
   serializedVersion: 4

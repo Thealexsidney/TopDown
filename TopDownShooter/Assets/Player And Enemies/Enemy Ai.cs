@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyAi : MonoBehaviour
 {
@@ -12,37 +14,55 @@ public class EnemyAi : MonoBehaviour
     public Transform firePoint; // Point from where the bullet will be fired
     private Transform player;
     private float timer = 0f;
+   
     [SerializeField] private float firingRate = 1f;
+    [SerializeField] LayerMask obstacleMask;
+
+    private Vector2 startPoint;
+    
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform; // Find the player by tag
+        startPoint = transform.position;
+          
     }
+
+    
 
     void Update()
     {
         timer += Time.deltaTime;
+        
         // Move towards the player
         float distance = Vector2.Distance(transform.position, player.position);
-        if (distance <= shootingRange)
+       
+        if (CanSee())
         {
-            // Move towards the player
-            Vector2 direction = (player.position - transform.position).normalized;
-            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
-
-            // Shoot at the player
-            if (timer >= firingRate)
+            if (distance <= shootingRange)
             {
-                Shoot();
-                timer = 0;
+                // Move towards the player
+                Vector2 direction = (player.position - transform.position).normalized;
+                transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+
+                // Shoot at the player
+                if (timer >= firingRate)
+                {
+                    Shoot();
+                    timer = 0;
+                }
+            }
+            if (distance < followRange && distance > shootingRange)
+            {
+                // Move towards the player
+                Vector2 direction = (player.position - transform.position).normalized;
+                transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+
             }
         }
-        if (distance < followRange && distance > shootingRange)
+        if (!CanSee())
         {
-            // Move towards the player
-            Vector2 direction = (player.position - transform.position).normalized;
-            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
-
+            transform.position = Vector2.MoveTowards(transform.position, startPoint, speed * Time.deltaTime);
         }
     }
 
@@ -52,6 +72,16 @@ public class EnemyAi : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Vector2 direction = (player.position - firePoint.position).normalized;
         bullet.GetComponent<Rigidbody2D>().velocity = direction * 10f; // Set bullet speed
+    }
+
+    bool CanSee()
+    {
+        Vector2 directionToPLayer = player.position - transform.position;
+        float distanceToPLayer = directionToPLayer.magnitude;
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPLayer.normalized, distanceToPLayer, obstacleMask);
+
+        return hit.collider == null;
     }
     
 }

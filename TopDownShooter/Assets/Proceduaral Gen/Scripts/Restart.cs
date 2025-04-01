@@ -5,7 +5,7 @@ using UnityEngine;
 public class Restart : MonoBehaviour
 {
     public GameObject player;
-    public GameObject spawnProtection;
+    
     public Transform spawnTarget;
     public float destroyRadius = 15f; // Radius within which enemies will be destroyed
     public string enemyTag = "Enemy"; // Tag to identify enemy objects
