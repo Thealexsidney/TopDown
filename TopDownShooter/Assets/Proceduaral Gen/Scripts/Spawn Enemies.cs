@@ -58,6 +58,13 @@ public class SpawnEnemies : MonoBehaviour
 
     }
 
+    public bool AllEnemiesDead()
+    {
+        int enemiesAlive = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        if (enemiesAlive == 0) { return true; };
+        return false;
+    }
+
     public void Spawn()
     {
         IdentifyWalkableTiles();

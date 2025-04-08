@@ -15,7 +15,7 @@ public class EnemyAi : MonoBehaviour
     private Transform player;
     private float timer = 0f;
    
-    [SerializeField] private float firingRate = 1f;
+    [SerializeField] private float firingRate = 10f;
     [SerializeField] LayerMask obstacleMask;
 
     private Vector2 startPoint;
